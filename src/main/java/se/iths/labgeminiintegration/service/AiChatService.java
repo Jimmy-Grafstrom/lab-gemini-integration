@@ -2,6 +2,9 @@ package se.iths.labgeminiintegration.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import se.iths.labgeminiintegration.mapper.AiChatMapper;
+import se.iths.labgeminiintegration.model.AiChatPromptEntity;
+import se.iths.labgeminiintegration.model.AiChatPromptResponseDto;
 import se.iths.labgeminiintegration.repository.AiChatPromptRepository;
 
 import java.util.List;
@@ -12,16 +15,18 @@ public class AiChatService {
 
     private final AiChatPromptRepository chatPromptRepository;
     private final GeminiService geminiService;
+    private final AiChatMapper mapper;
 
-    public List<String> getAllResponses() {
-        // Here you would implement the logic to retrieve all prompts from the repository
-        // and get responses for each prompt using the GeminiService. This is a placeholder implementation.
-        return List.of("Response 1 from AiChatPromptService.", "Response 2 from AiChatPromptService.");
+    public List<AiChatPromptResponseDto> getAllResponses() {
+        return chatPromptRepository.findAllByOrderByTimestampDesc()
+                .stream()
+                .map(mapper::toResponseDto)
+                .toList();
     }
 
     public void processAndSavePrompt(String userPrompt) {
-        // GeminiService
-        // Map from dto to entity
-        // Save to repository
+        String response = geminiService.getPromptResponse(userPrompt);
+        AiChatPromptEntity entity = mapper.toEntity(userPrompt, response);
+        chatPromptRepository.save(entity);
     }
 }

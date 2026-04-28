@@ -1,5 +1,7 @@
 package se.iths.labgeminiintegration.service;
 
+import com.google.genai.Client;
+import com.google.genai.types.GenerateContentResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -8,8 +10,20 @@ import org.springframework.stereotype.Service;
 public class GeminiService {
 
     public String getPromptResponse(String userPrompt) {
-        // Logic for gemini integration
-        return "Ai response";
+        GenerateContentResponse response =
+                null;
+        try (Client client = new Client()){
+
+
+            response = client.models.generateContent(
+                    "gemini-3-flash-preview",
+                    userPrompt,
+                    null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return response.text();
     }
 
 

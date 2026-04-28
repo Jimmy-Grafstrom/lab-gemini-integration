@@ -1,10 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini AI Chat</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; background-color: #f4f4f9; }
+        .chat-container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 1.5rem; }
+        textarea { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; min-height: 100px; resize: vertical; box-sizing: border-box; }
+        button { background-color: #4a90e2; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 4px; cursor: pointer; font-size: 1rem; }
+        button:hover { background-color: #357abd; }
+        .error { color: #d9534f; font-size: 0.9rem; margin-top: 0.5rem; }
+        .history { margin-top: 3rem; }
+        .chat-item { border-bottom: 1px solid #eee; padding: 1rem 0; }
+        .chat-item:last-child { border-bottom: none; }
+        .user-prompt { font-weight: bold; color: #333; margin-bottom: 0.5rem; }
+        .ai-response { color: #555; white-space: pre-wrap; background: #f9f9f9; padding: 1rem; border-radius: 4px; }
+        .timestamp { font-size: 0.8rem; color: #999; }
+    </style>
 </head>
 <body>
+
+<div class="chat-container">
+    <h1>Gemini AI Integration</h1>
+
+    <form th:action="@{/submit-prompt}" th:object="${promptDto}" method="post">
+        <div class="form-group">
+            <label for="prompt">Ställ en fråga till Gemini:</label>
+            <textarea id="prompt" th:field="*{prompt}" placeholder="Skriv din fråga här..."></textarea>
+            <div class="error" th:if="${#fields.hasErrors('prompt')}" th:errors="*{prompt}">Error</div>
+        </div>
+        <button type="submit">Skicka fråga</button>
+    </form>
+
+    <div class="history" th:if="${not #lists.isEmpty(prompts)}">
+        <h2>Historik</h2>
+        <div th:each="p : ${prompts}" class="chat-item">
+            <div class="user-prompt">
+                <span>Fråga: </span>
+                <span th:text="${p.prompt}">Din fråga...</span>
+            </div>
+            <div class="ai-response" th:text="${p.response}">
+                Svar från Gemini...
+            </div>
+            <!-- Om du lägger till timestamp i DTO:n kan du avkommentera raden nedan -->
+            <!-- <div class="timestamp" th:text="${#temporals.format(p.timestamp, 'yyyy-MM-dd HH:mm')}">Tid</div> -->
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

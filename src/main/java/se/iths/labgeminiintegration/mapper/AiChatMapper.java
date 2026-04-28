@@ -10,11 +10,9 @@ import java.time.LocalDateTime;
 
 @Mapper(componentModel = "spring", imports = {LocalDateTime.class})
 public interface AiChatMapper {
-
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "response", ignore = true)
     @Mapping(target = "timestamp", expression = "java(LocalDateTime.now())")
-    AiChatPromptEntity toEntity(AiChatPromptRequestDto requestDto);
+    AiChatPromptEntity toEntity(String prompt, String response);
 
     AiChatPromptResponseDto toResponseDto(AiChatPromptEntity entity);
 }

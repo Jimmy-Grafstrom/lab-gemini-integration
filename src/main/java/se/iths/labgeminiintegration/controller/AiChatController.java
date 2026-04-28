@@ -1,17 +1,25 @@
 package se.iths.labgeminiintegration.controller;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import se.iths.labgeminiintegration.model.AiChatPromptRequestDto;
+import se.iths.labgeminiintegration.service.AiChatService;
 
 @Controller
 @RequestMapping("/")
+@RequiredArgsConstructor
 public class AiChatController {
 
+    private final AiChatService aiChatService;
+
     @GetMapping
-    public String getAllPrompts() {
+    public String getAllPrompts(Model model) {
+        model.addAttribute("prompts", aiChatService.getAllResponses());
+        model.addAttribute("promptDto", new AiChatPromptRequestDto(""));
         return "index";
     }
 
@@ -21,8 +29,7 @@ public class AiChatController {
         if (bindingResult.hasErrors()) {
             return "index";
         }
-        // Send to aichatservice, that uses geminiservice
-        // and then return the response to the view. This is a placeholder implementation.
+        aiChatService.processAndSavePrompt(promptDto.prompt());
         return "redirect:/";
     }
 }

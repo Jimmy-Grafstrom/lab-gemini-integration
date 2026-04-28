@@ -4,6 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import se.iths.labgeminiintegration.model.AiChatPromptEntity;
 
+import java.util.List;
+
 @Repository
 public interface AiChatPromptRepository extends JpaRepository<AiChatPromptEntity, Long> {
+    List<AiChatPromptEntity> findAllByOrderByTimestampDesc();
 }
