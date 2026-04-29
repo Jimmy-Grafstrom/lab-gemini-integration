@@ -16,7 +16,7 @@ public String getPromptResponse(String userPrompt) {
                     null);
             return response.text();
         } catch (Exception e) {
-            throw new RuntimeException("Kunde inte hämta svar från Gemini API", e);
+            throw new RuntimeException("Could not retrieve response from Gemini API", e);
         }
     }
 }

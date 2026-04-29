@@ -145,9 +145,64 @@ button:active {
     font-size: 1.05rem;
 }
 
-.timestamp {
-    font-size: 0.8rem;
+/* History Toggling */
+.history-list .chat-item:nth-child(n+4) {
+    display: none;
+}
+
+.history-list.expanded .chat-item:nth-child(n+4) {
+    display: block;
+}
+
+.toggle-history-btn {
+    display: block;
+    width: 100%;
+    background: none;
+    border: 2px dashed var(--border-color);
     color: var(--text-muted);
-    margin-top: 0.5rem;
-    text-align: right;
+    padding: 0.75rem;
+    margin-top: 1rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.toggle-history-btn:hover {
+    background-color: #f0f4f8;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.hidden {
+    display: none !important;
+}
+
+.loading-text {
+    margin-top: 1.5rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-align: center;
+    
+    /* Gradient för animationen */
+    background: linear-gradient(
+        to right, 
+        var(--primary-color) 20%, 
+        #a2c9ff 40%, 
+        #a2c9ff 60%, 
+        var(--primary-color) 80%
+    );
+    background-size: 200% auto;
+    
+    /* Gör texten genomskinlig så att gradienten syns */
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    
+    animation: shine 2s linear infinite;
+}
+
+@keyframes shine {
+    to {
+        background-position: 200% center;
+    }
 }

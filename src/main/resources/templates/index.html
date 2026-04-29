@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,26 +13,35 @@
 
     <form th:action="@{/submit-prompt}" th:object="${promptDto}" method="post">
         <div class="form-group">
-            <label for="prompt">Ställ en fråga till Gemini</label>
-            <textarea id="prompt" th:field="*{prompt}" placeholder="Vad kan jag hjälpa dig med idag?"></textarea>
-            <div class="error" th:if="${#fields.hasErrors('prompt')}" th:errors="*{prompt}">Felmeddelande</div>
+            <label for="prompt">Ask Gemini a question</label>
+            <textarea id="prompt" th:field="*{prompt}" placeholder="How can I help you today?"></textarea>
+            <div class="error" th:if="${#fields.hasErrors('prompt')}" th:errors="*{prompt}">Error message</div>
         </div>
-        <button type="submit">Skicka fråga</button>
+        <button type="submit">Send Question</button>
+        <div id="loadingMessage" class="loading-text hidden">
+            Please wait, your response will be ready shortly...
+        </div>
     </form>
 
     <div class="history" th:if="${not #lists.isEmpty(prompts)}">
-        <h2>Tidigare konversationer</h2>
-        <div th:each="p : ${prompts}" class="chat-item">
-            <div class="user-prompt">
-                <span>Fråga</span>
-                <span th:text="${p.prompt}">Din fråga...</span>
-            </div>
-            <div class="ai-response" th:text="${p.response}">
-                Svar från Gemini...
+        <h2>Conversation History</h2>
+        <div id="historyList" class="history-list">
+            <div th:each="p : ${prompts}" class="chat-item">
+                <div class="user-prompt">
+                    <span>Question</span>
+                    <span th:text="${p.prompt}">Your question...</span>
+                </div>
+                <div class="ai-response" th:text="${p.response}">
+                    Response from Gemini...
+                </div>
             </div>
         </div>
+        <button type="button" id="toggleHistoryBtn" class="toggle-history-btn" th:if="${#lists.size(prompts) > 3}">
+            Show all history
+        </button>
     </div>
 </div>
 
+<script th:src="@{/js/chat.js}"></script>
 </body>
 </html>
