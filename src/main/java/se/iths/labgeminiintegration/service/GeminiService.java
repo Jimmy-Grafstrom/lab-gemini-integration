@@ -8,23 +8,15 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class GeminiService {
-
-    public String getPromptResponse(String userPrompt) {
-        GenerateContentResponse response =
-                null;
-        try (Client client = new Client()){
-
-
-            response = client.models.generateContent(
+public String getPromptResponse(String userPrompt) {
+        try (Client client = new Client()) {
+            GenerateContentResponse response = client.models.generateContent(
                     "gemini-3-flash-preview",
                     userPrompt,
                     null);
+            return response.text();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Kunde inte hämta svar från Gemini API", e);
         }
-
-        return response.text();
     }
-
-
 }
